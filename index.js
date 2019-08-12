@@ -60,6 +60,16 @@ app.post('/upload', upload.single('upload'), (req, res) => {
 
 // create a GET route
 app.post('/getFields', (req, res) => {
+  const directory = __dirname + '/images'
+  fs.readdir(directory, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      fs.unlink(path.join(directory, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+
   const fileId = req.body.fileId
   let options = {
     url:`https://api.sypht.com/result/final/${fileId}`,
